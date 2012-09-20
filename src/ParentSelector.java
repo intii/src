@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class ParentSelector {
 	
-	private FitnessCalculator fc;
+	private AbsFitnessCalculator fc;
 	
-	public ParentSelector(FitnessCalculator fc){
+	public ParentSelector(AbsFitnessCalculator fc){
 		this.fc = fc;
 	}
 	

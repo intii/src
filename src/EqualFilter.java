@@ -7,7 +7,7 @@ public class EqualFilter implements IFilter{
 		this.comp = comp;
 	}
 
-	public boolean isValid(DecodedSolution ds, Resource r) {
+	public boolean isValid( Resource r) {
 		return (r.getSkill() == this.comp);
 	}
 

@@ -55,9 +55,9 @@ public class SolutionHandler {
 		if( resListActivity.size()==0)
 			return false;
 		ScheduledActivity sa = ds.getScheduledActivity(a.getId());
-		IFilter bf = new BetweenFilter(a,sa.getStartTime(), sa.getEndTime());
+		IFilter bf = new BetweenFilter(ds,a,sa.getStartTime(), sa.getEndTime());
 		for (Resource re : resListActivity){
-			if( !bf.isValid(ds, re) )
+			if( !bf.isValid(re) )
 				return true;
 		}
 		return false;

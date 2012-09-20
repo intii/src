@@ -4,11 +4,9 @@ import java.util.ArrayList;
 public class InitialPopulator {
 	
 	private SolutionHandler sh;
-	private Solution s;
 	
 	public InitialPopulator(SolutionHandler sh){
 		this.sh = sh;
-		this.s  = new Solution();
 	}
 		
 	private boolean isValid(int act, ArrayList<Activity> acts){
@@ -35,55 +33,48 @@ public class InitialPopulator {
 		return acts;
 	}
 	
-	public void getRandomResources(Activity a, int h, DecodedSolution ds, ArrayList<Resource> resListActivity){
+	public ArrayList<Resource> getPossibleResources(Activity a, int h){
 		IFilter ef = new EqualFilter(h+1);
-		ScheduledActivity sa = ds.getScheduledActivity(a.getId());
-		IFilter bf = new BetweenFilter(a,sa.getStartTime(), sa.getEndTime());
-		IFilter af = new AndFilter(ef, bf);
+		ArrayList<Resource> resListActivity = new ArrayList<Resource>();
 		for(Resource re : this.sh.getResources()){
-			if( af.isValid(ds, re))
+			if( ef.isValid(re))
 				resListActivity.add(re);
 		}
+		return resListActivity;
+	}
+	
+	public ArrayList<Resource> getResourcesForActivity( Activity a){
+		
+		int [] neededRes = new int[a.getResources().length];
+		for(int n = 0; n < a.getResources().length; n++)
+			neededRes[n]= a.getResources()[n];
+		ArrayList<Resource> resList = new ArrayList<Resource>();
+		for( int h = 0 ; h < neededRes.length ; h++){//for each skill needed
+			ArrayList<Resource> resListActivity = this.getPossibleResources(a, h);
+			while( neededRes[h] > 0){
+				int newResIndex = (int)(Math.random()*(resListActivity.size()-1));
+				resList.add(resListActivity.get(newResIndex));
+				resListActivity.remove(newResIndex);
+				neededRes[h]--;
+			}
+		}
+		return resList;
 	}
 		
 	private ArrayList<ArrayList<Resource>> getInitialResources( ArrayList<Activity> acts){
 		ArrayList<ArrayList<Resource>> resList = new ArrayList<ArrayList<Resource>>(acts.size());
 		//initialize the vector of resources with the correct amount of empty vectors 
-		for(int i=0;i<acts.size();i++){
+/*		for(int i=0;i<acts.size();i++){
 			ArrayList<Resource> rl = new ArrayList<Resource>();
 			resList.add(rl);
 		}
-		this.s.setActivities(acts);
-		this.s.setAssignedRes(resList);
-		DecodedSolution ds = this.sh.getSchedule(s);
-//		System.out.println("tempo final antes de los recursos: "+ds.getFinalTime());
+*/
 		for(int i = 0; i< acts.size() ; i++){//for each activity
-			boolean delayed = false;
 			Activity a = acts.get(i);
 			//get needed resources
-			int [] neededRes = new int[a.getResources().length];
-			for(int n = 0; n < a.getResources().length; n++)
-				neededRes[n]= a.getResources()[n];
-			ArrayList<Resource> resListActivity = new ArrayList<Resource>();
-			for( int h = 0 ; h < neededRes.length ; h++){//for each skill needed
-				while( neededRes[h] > 0 && !delayed){
-					resListActivity.clear();
-					getRandomResources(a,h,ds,resListActivity);
-					if(resListActivity.size() > 0){
-						int newRandomRes = (int)(Math.random()*(resListActivity.size()-1 ));
-						resList.get(i).add(resListActivity.get(newRandomRes));
-						this.sh.getAssigner(resList, ds.getAssigner());
-						neededRes[h]--;
-					}else{
-						ds.delayActivities(this.sh.getPrecedenceMatrix(), a.getId());
-						delayed=true;
-						resList.get(i).clear();
-						this.sh.initMatrix(ds.getAssigner());
-						this.sh.getAssigner(resList, ds.getAssigner());
-						i--;
-					}
-				}
-			}
+			ArrayList<Resource> rl = this.getResourcesForActivity(a);
+			resList.add(rl);
+	
 		}
 		return resList;
 	}

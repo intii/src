@@ -2,9 +2,9 @@ import java.util.*;
 
 public class PopulationReplacer {
 
-	private FitnessCalculator fc;
+	private AbsFitnessCalculator fc;
 	
-	public PopulationReplacer(FitnessCalculator fc){
+	public PopulationReplacer(AbsFitnessCalculator fc){
 		
 		this.fc = fc;
 	}
@@ -12,7 +12,7 @@ public class PopulationReplacer {
 	public ArrayList<Solution> replace(ArrayList<Pair> parents, ArrayList<Solution> offspring){
 		ArrayList<Solution> newPopulation = new ArrayList<Solution>();
 		int j = 0;
-		fc.updateDomgrade(offspring);
+		fc.updateFitness(offspring);
 		for(int i = 0; i < offspring.size();i++){
 //		if( 0.5 < Math.random()){
 		//TODO replace with closest parent

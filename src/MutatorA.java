@@ -17,11 +17,11 @@ public class MutatorA implements IMutator{
 		this.ip = ip;
 	}
 	private void mutateActivities(ArrayList<Activity> acts){
-		//TODO for each activity, not position man!
+		ArrayList<Activity> toBeMutated = new ArrayList<Activity>(acts);
 		for(int i = 0; i < acts.size() ; i++){
 			double r = Math.random();
 			if( r <= this.pm ){
-				Activity a = acts.get(i);
+				Activity a = toBeMutated.get(i);
 				int actId = a.getId();
 				int closestPred = 0;
 				int closestSucc = acts.size()-1;
@@ -42,44 +42,18 @@ public class MutatorA implements IMutator{
 				//generate a new random position in a possible range
 				int newPos = closestPred + (int)(Math.random()*(closestSucc-closestPred ));
 				//insert in the new position with a possibility of pm
-				acts.remove(i);
+				acts.remove(a);
 				acts.add(newPos,a);
 			}	
 		}
 	}
 	
-	private void mutateResources(Solution s, ArrayList<ArrayList<Resource>> res, ArrayList<Activity> acts){
-		//TODO no tener en cuenta el schedule
-		DecodedSolution ds = this.sh.getSchedule(s);
+	private void mutateResources( ArrayList<ArrayList<Resource>> res, ArrayList<Activity> acts){
 		for(int i = 0; i < acts.size(); i++){//for each activity
 			double r = Math.random();
 			if( r <= this.pm ){
-				Activity a = acts.get(i);
-				ArrayList<Resource> copy = new ArrayList<Resource>(res.get(i));
-				res.get(i).clear();
-				//get needed resources
-				int [] neededRes = new int[a.getResources().length];
-				for(int n = 0; n < a.getResources().length; n++)
-					neededRes[n]= a.getResources()[n];
-				ArrayList<Resource> resListActivity = new ArrayList<Resource>();
-				for( int h = 0 ; h < neededRes.length ; h++){//for each skill needed
-					while( neededRes[h] > 0 ){
-						resListActivity.clear();
-						this.ip.getRandomResources(a,h,ds,resListActivity);
-						if(resListActivity.size() > 0){
-							int newRandomRes = (int)(Math.random()*(resListActivity.size()-1 ));
-							res.get(i).add(resListActivity.get(newRandomRes));
-							this.sh.getAssigner(res, ds.getAssigner());
-							neededRes[h]--;
-						}else{
-							res.get(i).clear();
-							res.get(i).addAll(copy);
-							for(int j = 0; j<neededRes.length;j++){
-								neededRes[j]=0;
-							}
-						}
-					}
-				}
+				res.remove(i);
+				res.add(i, ip.getResourcesForActivity(acts.get(i)));
 			}
 		}
 	}
@@ -87,7 +61,7 @@ public class MutatorA implements IMutator{
 		ArrayList<Activity> newAct = new ArrayList<Activity>(s.getActivities());
 		ArrayList<ArrayList<Resource>> newRes = new ArrayList<ArrayList<Resource>>(s.getAssignedRes());
 		this.mutateActivities(newAct);
-		this.mutateResources(s,newRes,newAct);
+		this.mutateResources(newRes,newAct);
 		Solution newSol = new Solution(newAct,newRes);
 		s = newSol;
 	}

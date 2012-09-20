@@ -10,8 +10,8 @@ public class AndFilter implements IFilter{
 	}
 
 	@Override
-	public boolean isValid(DecodedSolution ds, Resource r) {
-		return ( f1.isValid(ds, r) && f2.isValid(ds, r) );
+	public boolean isValid( Resource r) {
+		return ( f1.isValid( r) && f2.isValid( r) );
 	}
 
 }

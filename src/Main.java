@@ -28,10 +28,10 @@ public class Main {
 //		}
 		SolutionHandler sh = new SolutionHandler(32, 103, 4);
 		InitialPopulator ip = new InitialPopulator(sh);
-		FitnessCalculator fc = new FitnessCalculator(sh);
+		AbsFitnessCalculator fc = new FitnessCalculatorMS(sh);
 		ParentSelector ps = new ParentSelector(fc);
 		MutatorA m = new MutatorA(sh,ip);
-		CrosserA cr = new CrosserA(32, 0.5);
+		CrosserA cr = new CrosserA(32, 0.5,0.9);
 		PopulationReplacer pr = new PopulationReplacer(fc);
 		Solver solv = new Solver(sh);
 		solv.setCrosser(cr);
@@ -41,12 +41,11 @@ public class Main {
 		solv.setNumberInitialSolutions(50);
 		solv.setParentSelector(ps);
 		solv.setPopulationReplacer(pr);
-		solv.setCutCondition(500);
+		solv.setCutCondition(50);
 		ArrayList<Solution> result = solv.solve();
 		for(Solution s : result){
 			System.out.println(s);
-			System.out.println("Duration Fitness" + fc.getDuration(s, sh));
-			System.out.println("Effectiveness Fitness" + fc.getEffectiveness(s));
+			System.out.println("Duration Fitness" + fc.getFitness(s));
 		}
 //		System.out.println("---------------------------INITIAL SOLUTION------------------------");
 		

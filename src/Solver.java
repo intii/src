@@ -7,7 +7,7 @@ public class Solver {
 	private IMutator mutator;
 	private ParentSelector parentSelector;
 	private InitialPopulator initialPopulator;
-	private FitnessCalculator fitnessCalculator;
+	private AbsFitnessCalculator fitnessCalculator;
 	private PopulationReplacer populationReplacer;
 	
 	private SolutionHandler sh;
@@ -42,7 +42,7 @@ public class Solver {
 		this.initialPopulator = initialPopulator;
 	}
 
-	public void setFitnessCalculator(FitnessCalculator fitnessCalculator) {
+	public void setFitnessCalculator(AbsFitnessCalculator fitnessCalculator) {
 		this.fitnessCalculator = fitnessCalculator;
 	}
 	

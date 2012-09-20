@@ -4,10 +4,12 @@ import java.util.ArrayList;
 public class CrosserA implements ICrosser {
     private int nActivity;
     private double discriminant;
+    private double pc;
     
-    public CrosserA(int activities, double dis){
+    public CrosserA(int activities, double dis, double pc){
         this.nActivity = activities;
         this.discriminant = dis;
+        this.pc = pc;
         
     }
     
@@ -74,6 +76,12 @@ public class CrosserA implements ICrosser {
 		Solution s1 = p.getS1();
 		Solution s2 = p.getS2();
 		ArrayList<Solution> children = new ArrayList<Solution>();
+		double v = Math.random();
+		if(v > this.pc){
+			children.add(s1);
+			children.add(s2);
+			return children;
+		}
 		ArrayList<ArrayList<ArrayList<Resource>>> childrenResources = this.getChildResources(s1.getAssignedRes(), s2.getAssignedRes());
 		ArrayList<ArrayList<Activity>> childrenActivities = this.getChildActivities(s1.getActivities(), s2.getActivities());
 		for(int i = 0; i < childrenActivities.size(); i++){
