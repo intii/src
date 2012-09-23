@@ -8,8 +8,8 @@ public class FitnessCalculatorMulti extends AbsFitnessCalculator{
 	private int[] domgrade;
 	
 	
-	public FitnessCalculatorMulti(SolutionHandler sh,AbsFitnessCalculator fc1,AbsFitnessCalculator fc2){
-		super(sh);
+	public FitnessCalculatorMulti(AbsSolutionDecoder sd,AbsFitnessCalculator fc1,AbsFitnessCalculator fc2){
+		super(sd);
 		this.fc1 = fc1;
 		this.fc2 = fc2;
 	}

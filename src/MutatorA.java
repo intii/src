@@ -1,7 +1,7 @@
 import java.util.*;
-public class MutatorA implements IMutator{
+public class MutatorA extends AbsMutator{
 	
-	private double pm = 0.2;
+	
 	private SolutionHandler sh;
 	private InitialPopulator ip;
 	

@@ -4,13 +4,11 @@ import java.util.ArrayList;
 public class Solver {
 
 	private ICrosser crosser;
-	private IMutator mutator;
-	private ParentSelector parentSelector;
+	private AbsMutator mutator;
+	private AbsParentSelector parentSelector;
 	private InitialPopulator initialPopulator;
-	private AbsFitnessCalculator fitnessCalculator;
-	private PopulationReplacer populationReplacer;
+	private AbsPopulationReplacer populationReplacer;
 	
-	private SolutionHandler sh;
 	private int numberInitialSolutions;
 	private int cutCondition=500;
 	
@@ -22,31 +20,23 @@ public class Solver {
 		this.cutCondition = cutCondition;
 	}
 
-	public Solver (SolutionHandler sh){
-		this.sh = sh;
-	}
-
 	public void setCrosser(ICrosser crosser) {
 		this.crosser = crosser;
 	}
 
-	public void setMutator(IMutator mutator) {
+	public void setMutator(AbsMutator mutator) {
 		this.mutator = mutator;
 	}
 
-	public void setParentSelector(ParentSelector parentSelector) {
+	public void setParentSelector(AbsParentSelector parentSelector) {
 		this.parentSelector = parentSelector;
 	}
 
 	public void setInitialPopulator(InitialPopulator initialPopulator) {
 		this.initialPopulator = initialPopulator;
 	}
-
-	public void setFitnessCalculator(AbsFitnessCalculator fitnessCalculator) {
-		this.fitnessCalculator = fitnessCalculator;
-	}
 	
-	public void setPopulationReplacer(PopulationReplacer populationReplacer) {
+	public void setPopulationReplacer(AbsPopulationReplacer populationReplacer) {
 		this.populationReplacer = populationReplacer;
 	}
 
@@ -61,8 +51,6 @@ public class Solver {
 		current = this.initialPopulator.getNInitialSolutions(this.numberInitialSolutions);
 		while(j < this.cutCondition ){//some condition
 			//make parent couples
-			System.out.println("Ciclo "+j);
-						
 			ArrayList<Pair> parents = this.parentSelector.pairMaker(current);
 			ArrayList<Solution> offspring = new ArrayList<Solution>();
 			//Cross parent couples
@@ -74,6 +62,24 @@ public class Solver {
 				this.mutator.mutate(offspring.get(i));
 			}
 			current = this.populationReplacer.replace(parents, offspring);
+			int minFitness = 200;
+			int maxFitness = 0;
+			double avgFitness = 0;
+			for(Solution s: current){
+				int currentFitness = Integer.parseInt(this.populationReplacer.getFc().getFitness(s));
+				if( currentFitness > maxFitness)
+					maxFitness = currentFitness;
+				if (currentFitness < minFitness)
+					minFitness = currentFitness;
+				avgFitness += currentFitness;
+			}
+			avgFitness = avgFitness/current.size();
+			System.out.println("Ciclo "+j);
+			System.out.println("Number of generated Solutions = "+Solution.getCounter());
+			System.out.println("Maximum Fitness = "+maxFitness);
+			System.out.println("Minimum Fitness = "+minFitness);
+			System.out.println("Average Fitness = "+avgFitness);
+			System.out.println();
 			j++;
 		}
 		return current;

@@ -5,8 +5,8 @@ public class FitnessCalculatorEf extends AbsFitnessCalculator{
 
 	private double[] effectivnessSolution;
 	
-	public FitnessCalculatorEf(SolutionHandler sh){
-		super(sh);
+	public FitnessCalculatorEf(AbsSolutionDecoder sd){
+		super(sd);
 	}
 	
 	

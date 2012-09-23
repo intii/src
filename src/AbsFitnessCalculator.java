@@ -4,10 +4,10 @@ import java.util.ArrayList;
 public abstract class AbsFitnessCalculator {
 	
 	protected ArrayList<Solution> population;
-	protected SolutionHandler sh;
+	protected AbsSolutionDecoder sd;
 	
-	public AbsFitnessCalculator(SolutionHandler sh){
-		this.sh = sh;
+	public AbsFitnessCalculator(AbsSolutionDecoder sd){
+		this.sd = sd;
 	}
 	
 	public abstract boolean isBetter(Solution s1, Solution s2);

@@ -13,6 +13,9 @@ public class Solution {
 		this.assignedRes = new ArrayList<ArrayList<Resource>>();
 	}
 	
+	public static int getCounter(){
+		return counter;
+	}
 	public void setActivities(ArrayList<Activity> activities) {
 		this.activities = activities;
 	}

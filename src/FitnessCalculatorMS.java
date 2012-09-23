@@ -5,20 +5,20 @@ public class FitnessCalculatorMS extends AbsFitnessCalculator{
 	
 	private int[] durationSolution;
 	
-	public FitnessCalculatorMS(SolutionHandler sh){
-		super( sh);
+	public FitnessCalculatorMS(AbsSolutionDecoder sd){
+		super( sd );
 	}
 	
 	
 	
-	public int getDuration(Solution s,SolutionHandler sh ){
-		 return(sh.getSchedule(s).getFinalTime());
+	public int getDuration(Solution s){
+		 return(sd.getSchedule(s).getFinalTime());
 	}
 	
 
 	@Override
 	public boolean isBetter(Solution s1, Solution s2) {
-		return (this.durationSolution[this.population.indexOf(s1)] < this.durationSolution[this.population.indexOf(s2)]);
+		return (this.durationSolution[this.population.indexOf(s1)] <= this.durationSolution[this.population.indexOf(s2)]);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class FitnessCalculatorMS extends AbsFitnessCalculator{
 		this.durationSolution= new int[solutions.size()];
 		int i;
 		for(i = 0;i<solutions.size();i++){
-			this.durationSolution[i] = this.getDuration(solutions.get(i), sh);
+			this.durationSolution[i] = this.getDuration(solutions.get(i));
 		}
 		
 	}

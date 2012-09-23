@@ -7,10 +7,10 @@ public class FitnessCalculator {
 	private double[] effectivnessSolution;
 	private int[] domgrade;
 	private ArrayList<Solution> population;
-	private SolutionHandler sh;
+	private AbsSolutionDecoder sd;
 	
-	public FitnessCalculator(SolutionHandler sh){
-		this.sh = sh;
+	public FitnessCalculator(AbsSolutionDecoder sd){
+		this.sd = sd;
 	}
 	
 	private double getEffectivenessAct(ArrayList<Resource> res){
@@ -32,8 +32,8 @@ public class FitnessCalculator {
 		return result;
 	}
 	
-	public int getDuration(Solution s,SolutionHandler sh ){
-		 return(sh.getSchedule(s).getFinalTime());
+	public int getDuration(Solution s){
+		 return(sd.getSchedule(s).getFinalTime());
 	}
 	
 	public void fitnessLoader(ArrayList<Solution> solutions){
@@ -44,7 +44,7 @@ public class FitnessCalculator {
 		this.domgrade = new int[solutions.size()];
 		int i;
 		for(i = 0;i<solutions.size();i++){
-			this.durationSolution[i] = this.getDuration(solutions.get(i), sh);
+			this.durationSolution[i] = this.getDuration(solutions.get(i));
 			this.effectivnessSolution[i] = this.getEffectiveness(solutions.get(i));
 		}
 		this.caculateDomdgrade();
