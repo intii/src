@@ -1,0 +1,11 @@
+**********************************************************
+Valor óptimo para cada objetivo de optimización
+
+************************************************************
+
+
+
+Makespan óptimo : 44
+
+
+Efectividad óptima: 30
